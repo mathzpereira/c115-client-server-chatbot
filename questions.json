@@ -1,0 +1,43 @@
+{
+  "questions": [
+    {
+      "question": {
+        "id": 1,
+        "title": "Quem foi o campeão mineiro no ano de 2025?",
+        "options": {
+          "a": "Atlético",
+          "b": "Cruzeiro",
+          "c": "América",
+          "d": "Pouso Alegre"
+        },
+        "answer": "a"
+      }
+    },
+    {
+      "question": {
+        "id": 2,
+        "title": "Quem é o atual hexacampeão mineiro e maior vencedor do torneio com 50 conquistas?",
+        "options": {
+          "a": "América",
+          "b": "Cruzeiro",
+          "c": "Pouso Alegre",
+          "d": "Atlético"
+        },
+        "answer": "d"
+      }
+    },
+    {
+      "question": {
+        "id": 3,
+        "title": "Quem foi o artilheiro das últimas quatro edições do Campeonato Mineiro?",
+        "options": {
+          "a": "Hulk",
+          "b": "O super-herói alvinegro",
+          "c": "O pai do Bruzeiro",
+          "d": "Givanildo Vieira de Sousa"
+        },
+        "answer": ["a", "b", "c", "d"]
+      }
+    }
+  ]
+}
