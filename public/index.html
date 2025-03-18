@@ -1,31 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat websocket</title>
+    <title>Quiz Campeonato Mineiro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <form id="chat">
-      <div class="messages"></div>
-      <input type="text" name="message" placeholder="Digite sua mensagem" />
-      <button type="submit">Enviar</button>
-    </form>
+    <div class="chat-container">
+      <h1>Quiz Campeonato Mineiro</h1>
+      <button id="startQuiz">Começar</button>
+      <div class="messages" id="messages"></div>
+      <form id="chat" style="display: none">
+        <input
+          type="text"
+          name="message"
+          placeholder="Digite sua mensagem..."
+          autofocus
+        />
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
 
-    <script type="text/javascript">
+    <script>
       var socket = io("http://localhost:3000");
 
+      document
+        .getElementById("startQuiz")
+        .addEventListener("click", function () {
+          socket.emit("sendMessage", { author: "User", message: "1" });
+          this.style.display = "none";
+          document.getElementById("chat").style.display = "block";
+        });
+
       function renderMessage(message) {
-        $(".messages").append(
-          '<div class="message"><strong>' +
-            message.author +
-            "</strong>: " +
-            message.message +
-            "</div>"
+        const messagesDiv = document.getElementById("messages");
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.classList.add(
+          message.author === "User" ? "user" : "server"
         );
+        messageElement.innerHTML = `<strong>${message.author}:</strong> ${message.message}`;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        if (message.message.includes("Quiz finalizado")) {
+          $("input[name=message]")
+            .prop("disabled", true)
+            .css("background", "#d3d3d3");
+          $("button[type=submit]")
+            .text("Reiniciar")
+            .off("click")
+            .on("click", function () {
+              location.reload();
+            });
+        }
       }
 
       socket.on("receivedMessage", function (message) {
@@ -39,13 +70,10 @@
         const author = "User";
 
         if (message.length) {
-          var messageObject = {
-            author: author,
-            message: message,
-          };
+          var messageObject = { author, message };
           renderMessage(messageObject);
-
           socket.emit("sendMessage", messageObject);
+          $("input[name=message]").val("");
         }
       });
     </script>

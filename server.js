@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
   socket.emit("receivedMessage", {
     author,
     message:
-      "Seja bem-vindo ao quiz do Campeonato Mineiro 2025! Digite '1' para começar",
+      "Seja bem-vindo ao quiz do Campeonato Mineiro 2025! Clique no botão acima para começar.",
   });
 
   socket.on("sendMessage", (data) => {
@@ -45,14 +45,24 @@ io.on("connection", (socket) => {
 function sendQuestion(socket) {
   if (currentQuestionIndex < questions.length) {
     const question = questions[currentQuestionIndex];
+    const formattedMessage = `
+      <strong>${question.question.title}</strong><br>
+      <ul style="list-style: none; padding: 0; text-align: left;">
+        <li><strong>A)</strong> ${question.question.options.a}</li>
+        <li><strong>B)</strong> ${question.question.options.b}</li>
+        <li><strong>C)</strong> ${question.question.options.c}</li>
+        <li><strong>D)</strong> ${question.question.options.d}</li>
+      </ul>
+    `;
+
     socket.emit("receivedMessage", {
       author,
-      message: `${question.question.title}\nA) ${question.question.options.a}\nB) ${question.question.options.b}\nC) ${question.question.options.c}\nD) ${question.question.options.d}`,
+      message: formattedMessage,
     });
   } else {
     socket.emit("receivedMessage", {
       author,
-      message: `Quiz finalizado! Sua pontuação: ${score}/${questions.length}`,
+      message: `<strong>Quiz finalizado!</strong><br>Sua pontuação: ${score}/${questions.length}`,
     });
     score = 0;
     currentQuestionIndex = -1;

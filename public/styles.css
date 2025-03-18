@@ -1,45 +1,315 @@
-html, body {
-    height: 100%;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
+
+:root {
+  --primary-color: #00875a;
+  --secondary-color: #facc15;
+  --blue-color: #003366;
+  --red-color: #ca0814;
+  --white-color: #ffffff;
+  --light-gray: #f9f9f9;
+  --dark-gray: #333;
+  --mid-gray: #666;
+  --border-radius: 12px;
+  --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--blue-color), var(--primary-color));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 650px;
+  background: var(--white-color);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  background: var(--light-gray);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--mid-gray);
+  margin-bottom: 20px;
+}
+
+#startQuiz {
+  background: var(--primary-color);
+  color: white;
+  padding: 14px 28px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: auto;
+  margin-bottom: 20px;
+}
+
+#startQuiz:hover {
+  transform: translateY(-3px);
+  background: #007048;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.messages {
+  width: 100%;
+  height: 350px;
+  overflow-y: auto;
+  border: none;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  background: var(--light-gray);
+  margin-bottom: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--light-gray);
+}
+
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: var(--light-gray);
+  border-radius: 10px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+
+.message {
+  padding: 12px 18px;
+  margin: 10px 0;
+  border-radius: 18px;
+  position: relative;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+.user {
+  background: var(--dark-gray);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 5px;
+  border-left: none;
+}
+
+.server {
+  background: var(--primary-color);
+  color: white;
+  margin-right: auto;
+  border-bottom-left-radius: 5px;
+  border-left: none;
+  text-align: left;
+}
+
+.message .author {
+  font-size: 12px;
+  position: absolute;
+  top: -18px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.user .author {
+  right: 10px;
+}
+
+.server .author {
+  left: 10px;
+}
+
+.message .content {
+  font-size: 16px;
+}
+
+.message .time {
+  font-size: 11px;
+  opacity: 0.7;
+  text-align: right;
+  margin-top: 5px;
+}
+
+#chat {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 14px 20px;
+  border: 2px solid #eaeaea;
+  border-radius: 30px;
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.2);
+}
+
+input:disabled {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+button[type="submit"] {
+  padding: 12px 24px;
+  background: var(--secondary-color);
+  color: var(--dark-gray);
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 120px;
+}
+
+button[type="submit"]:hover {
+  background: #eab308;
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  #chat {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+}
+
+.message {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.typing {
+  display: flex;
+  padding: 10px;
+  margin-right: auto;
+  align-items: center;
+  gap: 5px;
+  color: var(--mid-gray);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--mid-gray);
+  border-radius: 50%;
+  animation: typing-animation 1.5s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing-animation {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
   }
-  
-  input {
-    width: 600px;
-    border: 1px solid #ddd;
-    height: 50px;
-    padding: 0 20px;
-    font-size: 14px;
+  30% {
+    transform: translateY(-5px);
   }
-  
-  button {
-    width: 600px;
-    height: 50px;
-    font-size: 14px;
-    background: #069;
-    text-align: center;
-    line-height: 50px;
-    font-weight: bold;
-    color: #FFF;
-    margin-top: 10px;
-  }
-  
-  .messages {
-    width: 600px;
-    height: 400px;
-    margin: 20px 0;
-    border: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  .chat-container {
     padding: 20px;
   }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .messages {
+    height: 300px;
+  }
+
+  .input-area {
+    flex-direction: column;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+}
