@@ -17,7 +17,7 @@ app.use("/", (req, res) => {
 
 const author = "Server";
 let score = 0;
-let currentQuestionIndex = 0;
+let currentQuestionIndex = -1;
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
@@ -25,12 +25,13 @@ io.on("connection", (socket) => {
   socket.emit("receivedMessage", {
     author,
     message:
-      "Seja bem-vindo ao quiz do Campeonato Mineiro 2025! Digite 1 para começar",
+      "Seja bem-vindo ao quiz do Campeonato Mineiro 2025! Digite '1' para começar",
   });
 
   socket.on("sendMessage", (data) => {
-    let message = data.message;
-    if (message === "1" && currentQuestionIndex === 0) {
+    let message = data.message.toLowerCase().trim();
+    if (message === "1" && currentQuestionIndex === -1) {
+      currentQuestionIndex = 0;
       sendQuestion(socket);
     } else if (
       currentQuestionIndex >= 0 &&
@@ -42,14 +43,11 @@ io.on("connection", (socket) => {
 });
 
 function sendQuestion(socket) {
-  const question = questions[currentQuestionIndex];
-  if (question) {
-    const options = Object.entries(question.question.options)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join("\n");
+  if (currentQuestionIndex < questions.length) {
+    const question = questions[currentQuestionIndex];
     socket.emit("receivedMessage", {
       author,
-      message: `${question.question.title}\n${options}`,
+      message: `${question.question.title}\nA) ${question.question.options.a}\nB) ${question.question.options.b}\nC) ${question.question.options.c}\nD) ${question.question.options.d}`,
     });
   } else {
     socket.emit("receivedMessage", {
@@ -57,17 +55,27 @@ function sendQuestion(socket) {
       message: `Quiz finalizado! Sua pontuação: ${score}/${questions.length}`,
     });
     score = 0;
-    currentQuestionIndex = 0;
+    currentQuestionIndex = -1;
   }
 }
 
 function checkAnswer(socket, answer) {
+  const validAnswers = ["a", "b", "c", "d"];
+  if (!validAnswers.includes(answer)) {
+    socket.emit("receivedMessage", {
+      author,
+      message:
+        "Resposta inválida! Por favor, responda com 'a', 'b', 'c' ou 'd'.",
+    });
+    return;
+  }
+
   const question = questions[currentQuestionIndex];
   if (
     question &&
     (Array.isArray(question.question.answer)
-      ? question.question.answer.includes(answer.toLowerCase())
-      : answer.toLowerCase() === question.question.answer.toLowerCase())
+      ? question.question.answer.includes(answer)
+      : answer === question.question.answer)
   ) {
     score++;
   }
